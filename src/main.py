@@ -1,9 +1,3 @@
-"""
-package request:
-1. requests
-2. telebot
-"""
-
 from time import sleep
 import requests
 import os, json, random
@@ -11,19 +5,22 @@ import telebot
 
 #settings variables
 global bot
-global TOKEN
 global imagesAPI
+
 #read file of configuration for this app
 absolute_dir = os.path.dirname(__file__)
 nameFile = "settings.json"
 file = open(os.path.join(absolute_dir, nameFile))
 dataJson = json.load(file)
+
 #set token for telegram
 TOKEN = dataJson['bot_token']
 ImageAuth = dataJson['imageAuth']
+
 #set token for api images
 imagesAPI = "https://pixabay.com/api/?image_type=photo&category=animals&q=hamster&key="+ImageAuth
 
+#set token for bot
 bot = telebot.TeleBot(TOKEN)
 
 
@@ -31,12 +28,12 @@ bot = telebot.TeleBot(TOKEN)
 @bot.message_handler(commands=['start'])
 def handle_command_start(message):
     markup = telebot.types.ReplyKeyboardMarkup(row_width=4)
-    itemHamster = telebot.types.KeyboardButton('/🐹')
+    itemHamster = telebot.types.KeyboardButton('🐹')
     markup.add(itemHamster)
-    bot.send_message(message.chat.id, "Hello, welcome to Telegram Bot!", reply_markup=markup)
+    bot.send_message(message.chat.id, "Hi, welcome to Hamster Bot! Send this emoji '🐹' and you'll recive a hamster photo", reply_markup=markup)
 
 
-@bot.message_handler(commands=['🐹'])
+@bot.message_handler(regexp="🐹")
 def handle_command_hamster(messages):
     #get photo
     url = getUrlPhoto()
