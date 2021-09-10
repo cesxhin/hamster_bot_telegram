@@ -1,2 +1,17 @@
 # hamster_bot_telegram
- Submit pictures of the hamster
+## What does this bot?
+if you send this message "/🐹", you'll receive a hamster photo random
+## What packages do they require for this application in Python?
+```bash
+pip install requests pyTelegramBotAPI
+```
+## How start this application?
+This program get api images by https://pixabay.com/, if you haven't registered, do it now
+in current folder of src, create file "settings.json" end put this:
+```json
+{
+    "bot_token":"",
+    "imageAuth":""
+}
+```
+fill in the empty fields and Enjoy!
