@@ -22,7 +22,7 @@ dataJson = json.load(file)
 TOKEN = dataJson['bot_token']
 ImageAuth = dataJson['imageAuth']
 #set token for api images
-imagesAPI = "https://api.pexels.com/v1/search?query=hamster"
+imagesAPI = "https://pixabay.com/api/?image_type=photo&category=animals&q=hamster&key="+ImageAuth
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -42,28 +42,28 @@ def handle_command_hamster(messages):
     url = getUrlPhoto()
     
     #send photo
-    print("Chat id:"+str(messages.chat.id) +" get url -> "+url['src']['original'])
+    print("Chat id:"+str(messages.chat.id) +" get url -> "+url['webformatURL'])
     try:
-        bot.send_photo(messages.chat.id, str(url['src']['small']), reply_to_message_id=messages.message_id)
+        bot.send_photo(messages.chat.id, str(url['webformatURL']), reply_to_message_id=messages.message_id)
     except:
         bot.send_message(messages.chat.id, "error generic, try again please", reply_to_message_id=messages.message_id)
 
 def getUrlPhoto():
-    response = requests.get(imagesAPI, headers={"Authorization": ImageAuth}).json()
-    totalResults = response['total_results']
-    perPage = response['per_page']
+    response = requests.get(imagesAPI).json()
+    totalResults = response['totalHits']
+    perPage = 20
 
     #random
     page = random.randint(1, int(totalResults/perPage))
     imagePos = random.randint(0, 14)
 
     #get list photos
-    listImages = requests.get(imagesAPI+"&page="+str(page), headers={"Authorization": ImageAuth}).json()
+    listImages = requests.get(imagesAPI+"&page="+str(page)).json()
 
     #check overflow
-    if imagePos > (len(listImages['photos'])-1):
-        return listImages['photos'][len(listImages['results'])-1]
+    if imagePos > (len(listImages['hits'])-1):
+        return listImages['hits'][len(listImages['hits'])-1]
     else:
-        return listImages['photos'][imagePos]
+        return listImages['hits'][imagePos]
 
 bot.polling()
