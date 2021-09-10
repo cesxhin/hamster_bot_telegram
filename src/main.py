@@ -20,7 +20,7 @@ file = open(os.path.join(absolute_dir, nameFile))
 dataJson = json.load(file)
 #set token for telegram
 TOKEN = dataJson['bot_token']
-ImageAuth = dataJson['ImageAuth']
+ImageAuth = dataJson['imageAuth']
 #set token for api images
 imagesAPI = "https://api.pexels.com/v1/search?query=hamster"
 
